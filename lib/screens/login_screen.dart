@@ -8,6 +8,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.deepPurple.shade50,
       appBar: AppBar(
         title: const Text("Login"),
         backgroundColor: Colors.deepPurple,
@@ -17,39 +18,45 @@ class LoginPage extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/login.jpg', // Your futsal arena image
-              fit: BoxFit.cover, // Ensure the image covers the entire screen
+              'assets/images/login.jpg', // Background image
+              fit: BoxFit.cover, // Image will cover the entire screen
             ),
           ),
           // Content on top of the image
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
+            padding: const EdgeInsets.symmetric(
+                horizontal: 20, vertical: 40), // Increased vertical padding
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Welcome Text
-                  const Text(
-                    "Welcome to our Login Page",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+                  // Logo section with padding to avoid clipping
+                  Image.asset(
+                    'assets/images/logo.jpg', // Path to your logo image
+                    height: 100, // Set the desired height for the logo
+                    fit: BoxFit
+                        .contain, // Ensure the logo maintains its aspect ratio
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20), // Space after the logo
 
-                  // Futsal Quote Section
-                  const SizedBox(height: 50), // Adjust for better position
-                  Text(
-                    '"Futsal is the foundation of football, where skill is built and perfected."',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
+                  // Futsal Quote Section with shading
+                  const SizedBox(height: 50), // Adjust for better positioning
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.black
+                          .withOpacity(0.5), // Semi-transparent black
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    textAlign: TextAlign.center,
+                    child: Text(
+                      '"Futsal is the foundation of football, where skill is built and perfected."',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   const SizedBox(height: 40), // Space after the quote
 
@@ -118,36 +125,56 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Forgot Password Link
-                  TextButton(
-                    onPressed: () {
-                      // Add your forgot password logic here
-                    },
-                    child: const Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: Colors.deepPurple,
-                        fontWeight: FontWeight.bold,
+                  // Forgot Password Link with improved visibility
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(
+                          0.7), // Light background to improve visibility
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        // Add your forgot password logic here
+                      },
+                      child: const Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          color: Colors.deepPurple,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18, // Increased font size
+                        ),
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 20),
 
-                  // Sign up Link
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignupPage()),
-                      );
-                    },
-                    child: const Text(
-                      "Don't have an account? Sign up",
-                      style: TextStyle(
-                        color: Colors.deepPurple,
-                        fontWeight: FontWeight.bold,
+                  // Sign up Link with improved visibility
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(
+                          0.7), // Light background to improve visibility
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignupPage()),
+                        );
+                      },
+                      child: const Text(
+                        "Don't have an account? Sign up",
+                        style: TextStyle(
+                          color: Colors.deepPurple,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18, // Increased font size
+                        ),
                       ),
                     ),
                   ),
@@ -160,6 +187,8 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
+
 
 // import 'package:flutter/material.dart';
 
