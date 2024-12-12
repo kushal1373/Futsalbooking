@@ -1,7 +1,5 @@
 // import 'package:flutter/material.dart';
 
-
-
 // class RegistrationScreen StatefulWidget {
 //   @override
 //   _SignUpScreenState createState() => _SignUpScreenState();
@@ -188,11 +186,17 @@ class SignupPage extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
+            Image.asset(
+              'assets/images/signup.jpg',
+              height: 300,
+              width: 500 // Adjust according to your logo
+            ),
             const SizedBox(height: 30),
             TextField(
               decoration: InputDecoration(
                 labelText: "First Name",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 prefixIcon: const Icon(Icons.person, color: Colors.deepPurple),
               ),
             ),
@@ -200,7 +204,8 @@ class SignupPage extends StatelessWidget {
             TextField(
               decoration: InputDecoration(
                 labelText: "Email",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 prefixIcon: const Icon(Icons.email, color: Colors.deepPurple),
               ),
             ),
@@ -208,7 +213,8 @@ class SignupPage extends StatelessWidget {
             TextField(
               decoration: InputDecoration(
                 labelText: "Password",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 prefixIcon: const Icon(Icons.lock, color: Colors.deepPurple),
               ),
               obscureText: true,
@@ -217,7 +223,8 @@ class SignupPage extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -234,3 +241,112 @@ class SignupPage extends StatelessWidget {
     );
   }
 }
+
+// import 'package:flutter/material.dart';
+
+// class SignupScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           Container(
+//             decoration: const BoxDecoration(
+//               image: DecorationImage(
+//                 image: AssetImage(
+//                     'assets/signup.jpg'), // Replace with your provided signup background image
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//           ),
+//           Center(
+//             child: SingleChildScrollView(
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 children: [
+//                   Text(
+//                     'Create Account',
+//                     style: TextStyle(
+//                       fontSize: 32,
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.white,
+//                     ),
+//                   ),
+//                   SizedBox(height: 20),
+//                   Padding(
+//                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
+//                     child: TextField(
+//                       style: TextStyle(color: Colors.white),
+//                       decoration: InputDecoration(
+//                         prefixIcon: Icon(Icons.person, color: Colors.white),
+//                         hintText: 'Enter your name',
+//                         hintStyle: TextStyle(color: Colors.white70),
+//                         filled: true,
+//                         fillColor: Colors.black.withOpacity(0.5),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(12),
+//                           borderSide: BorderSide.none,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   SizedBox(height: 15),
+//                   Padding(
+//                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
+//                     child: TextField(
+//                       style: TextStyle(color: Colors.white),
+//                       decoration: InputDecoration(
+//                         prefixIcon: Icon(Icons.email, color: Colors.white),
+//                         hintText: 'Enter your email',
+//                         hintStyle: TextStyle(color: Colors.white70),
+//                         filled: true,
+//                         fillColor: Colors.black.withOpacity(0.5),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(12),
+//                           borderSide: BorderSide.none,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   SizedBox(height: 15),
+//                   Padding(
+//                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
+//                     child: TextField(
+//                       obscureText: true,
+//                       style: TextStyle(color: Colors.white),
+//                       decoration: InputDecoration(
+//                         prefixIcon: Icon(Icons.lock, color: Colors.white),
+//                         hintText: 'Enter your password',
+//                         hintStyle: TextStyle(color: Colors.white70),
+//                         filled: true,
+//                         fillColor: Colors.black.withOpacity(0.5),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(12),
+//                           borderSide: BorderSide.none,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   SizedBox(height: 30),
+//                   ElevatedButton(
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: Colors.purple,
+//                       padding:
+//                           EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+//                       shape: RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.circular(12)),
+//                     ),
+//                     onPressed: () {
+//                       Navigator.pushNamed(context, '/dashboard');
+//                     },
+//                     child: Text('Sign Up', style: TextStyle(fontSize: 18)),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

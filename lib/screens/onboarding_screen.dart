@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
+import 'package:futsal_booking/screens/login_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -16,7 +15,8 @@ class OnboardingScreen extends StatelessWidget {
           children: [
             Image.asset(
               'assets/images/logo.jpg',
-              height: 100, // Adjust according to your logo
+              height: 100,
+              width: 200, // Adjust according to your logo
             ),
             const SizedBox(height: 30),
             const Text(
@@ -28,10 +28,10 @@ class OnboardingScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 0),
             Image.asset(
               'assets/images/onboarding.jpg', // Add your onboarding image here
-              height: 250,
+              height: 300,
             ),
             const SizedBox(height: 30),
             Text(
@@ -43,7 +43,8 @@ class OnboardingScreen extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -65,3 +66,57 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 }
+
+// import 'package:flutter/material.dart';
+
+// class OnboardingScreen extends StatelessWidget {
+//   const OnboardingScreen({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           Container(
+//             decoration: const BoxDecoration(
+//               image: DecorationImage(
+//                 image: AssetImage(
+//                     'assets/onboarding.jpg'), // Replace with your provided onboarding background image
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//           ),
+//           Center(
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 Text(
+//                   'Welcome to Futsal Booking',
+//                   style: TextStyle(
+//                     fontSize: 28,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white,
+//                   ),
+//                   textAlign: TextAlign.center,
+//                 ),
+//                 SizedBox(height: 20),
+//                 ElevatedButton(
+//                   style: ElevatedButton.styleFrom(
+//                     backgroundColor: Colors.purple,
+//                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+//                     shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(12)),
+//                   ),
+//                   onPressed: () {
+//                     Navigator.pushNamed(context, '/login');
+//                   },
+//                   child: Text('Get Started', style: TextStyle(fontSize: 18)),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
