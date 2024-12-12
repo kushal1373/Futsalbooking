@@ -169,6 +169,78 @@
 //   }
 // }
 
+// import 'package:flutter/material.dart';
+
+// class SignupPage extends StatelessWidget {
+//   const SignupPage({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.deepPurple.shade50,
+//       appBar: AppBar(
+//         title: const Text("Sign Up"),
+//         backgroundColor: Colors.deepPurple,
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(20.0),
+//         child: Column(
+//           children: [
+//             Image.asset(
+//               'assets/images/signup.jpg',
+//               height: 300,
+//               width: 500 // Adjust according to your logo
+//             ),
+//             const SizedBox(height: 30),
+//             TextField(
+//               decoration: InputDecoration(
+//                 labelText: "First Name",
+//                 border:
+//                     OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+//                 prefixIcon: const Icon(Icons.person, color: Colors.deepPurple),
+//               ),
+//             ),
+//             const SizedBox(height: 20),
+//             TextField(
+//               decoration: InputDecoration(
+//                 labelText: "Email",
+//                 border:
+//                     OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+//                 prefixIcon: const Icon(Icons.email, color: Colors.deepPurple),
+//               ),
+//             ),
+//             const SizedBox(height: 20),
+//             TextField(
+//               decoration: InputDecoration(
+//                 labelText: "Password",
+//                 border:
+//                     OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+//                 prefixIcon: const Icon(Icons.lock, color: Colors.deepPurple),
+//               ),
+//               obscureText: true,
+//             ),
+//             const SizedBox(height: 30),
+//             ElevatedButton(
+//               style: ElevatedButton.styleFrom(
+//                 backgroundColor: Colors.deepPurple,
+//                 padding:
+//                     const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+//                 shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(10),
+//                 ),
+//               ),
+//               onPressed: () {},
+//               child: const Text(
+//                 "Sign Up",
+//                 style: TextStyle(fontSize: 18, color: Colors.white),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatelessWidget {
@@ -177,70 +249,100 @@ class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple.shade50,
-      appBar: AppBar(
-        title: const Text("Sign Up"),
-        backgroundColor: Colors.deepPurple,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Image.asset(
+      body: Stack(
+        children: [
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
               'assets/images/signup.jpg',
-              height: 300,
-              width: 500 // Adjust according to your logo
+              fit: BoxFit
+                  .cover, // Ensures the image covers the entire background
             ),
-            const SizedBox(height: 30),
-            TextField(
-              decoration: InputDecoration(
-                labelText: "First Name",
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                prefixIcon: const Icon(Icons.person, color: Colors.deepPurple),
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Email",
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                prefixIcon: const Icon(Icons.email, color: Colors.deepPurple),
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Password",
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                prefixIcon: const Icon(Icons.lock, color: Colors.deepPurple),
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+          ),
+          // Content (text fields and button) above the image
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 100), // Adjust this height as needed
+                // First Name TextField
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: "First Name",
+                    labelStyle:
+                        TextStyle(color: Colors.white), // White label text
+                    filled: true, // Fill the background
+                    fillColor: Colors.white
+                        .withOpacity(0.7), // Semi-transparent background
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                          color: Colors.blue.shade700, width: 2), // Blue border
+                    ),
+                    prefixIcon: const Icon(Icons.person,
+                        color: Colors.blue), // Blue icon
+                  ),
                 ),
-              ),
-              onPressed: () {},
-              child: const Text(
-                "Sign Up",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
+                const SizedBox(height: 20),
+                // Email TextField
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    labelStyle: TextStyle(color: Colors.white),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.7),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          BorderSide(color: Colors.blue.shade700, width: 2),
+                    ),
+                    prefixIcon: const Icon(Icons.email, color: Colors.blue),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Password TextField
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: "Password",
+                    labelStyle: TextStyle(color: Colors.white),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.7),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          BorderSide(color: Colors.blue.shade700, width: 2),
+                    ),
+                    prefixIcon: const Icon(Icons.lock, color: Colors.blue),
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 30),
+                // Sign Up Button
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.shade700,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
+
 
 // import 'package:flutter/material.dart';
 
