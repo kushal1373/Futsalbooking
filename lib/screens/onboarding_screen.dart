@@ -64,127 +64,141 @@
 //         ),
 //       ),
 //     );
-//   }
+//   }import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:futsal_booking/screens/login_screen.dart';
 import 'dart:ui'; // Required for BackdropFilter
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  double _opacity = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Trigger the fade-in animation
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        _opacity = 1.0;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Onboarding image as the background
+          // Background image
           Positioned.fill(
             child: Image.asset(
               'assets/images/onboarding.jpg',
-              fit: BoxFit.cover, // Ensure the image covers the entire screen
+              fit: BoxFit.cover,
             ),
           ),
-          // Content inside the screen
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Stack to position logo and apply blur effect above the logo
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Apply a blur effect above the logo
-                    Positioned(
-                      top:
-                          -50, // This will make the blur area extend above the logo
-                      left: 0,
-                      right: 0,
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                            sigmaX: 10.0, sigmaY: 10.0), // Apply blur
-                        child: Container(
-                          height:
-                              200, // This will determine how much of the area gets blurred above the logo
-                          width: 220, // Same width as logo
-                          color: Colors
-                              .transparent, // Transparent container to create the blur effect
-                        ),
+                // Circular avatar for the logo
+                CircleAvatar(
+                  radius: 60,
+                  backgroundColor: Colors.white.withOpacity(0.8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0), // Border padding
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/images/logo.jpg',
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    // Logo Image in the center of the blur area
-                    Image.asset(
-                      'assets/images/logo.jpg',
-                      height: 100, // Adjust logo size
-                      width: 200, // Adjust logo width
-                    ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 40), // Space between logo and text
+                const SizedBox(height: 40),
 
-                // Welcome Text with improved font size and contrast
+                // Enhanced Welcome Text
                 const Text(
                   "Welcome to Futsal Booking",
                   style: TextStyle(
-                    fontSize: 32, // Larger font size for visibility
+                    fontSize: 34,
                     fontWeight: FontWeight.bold,
-                    color: Colors
-                        .white, // White color for readability on background
+                    color: Colors.white,
+                    letterSpacing: 1.5,
                     shadows: [
                       Shadow(
-                        offset: Offset(2, 2),
-                        blurRadius: 6.0,
-                        color: Color(0x80000000), // Black with 50% opacity
+                        offset: Offset(3, 3),
+                        blurRadius: 10.0,
+                        color: Colors.black38,
                       ),
                     ],
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(
-                    height: 30), // Space between welcome text and description
+                const SizedBox(height: 20),
 
-                // Description Text with better contrast and background
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(
-                        0.5), // Semi-transparent background for text
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    "Book your futsal matches seamlessly and manage your schedule effortlessly.",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white, // Text color adjusted for contrast
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(height: 60), // Space before button
-
-                // Get Started Button
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple, // Button color
+                // Fade-in description text
+                AnimatedOpacity(
+                  opacity: _opacity,
+                  duration: const Duration(seconds: 2),
+                  child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15),
-                    shape: RoundedRectangleBorder(
+                        horizontal: 20, vertical: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    child: Text(
+                      "Book your futsal matches seamlessly and manage your schedule effortlessly.",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  onPressed: () {
+                ),
+                const Spacer(),
+
+                // Gradient button with animation
+                InkWell(
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const LoginPage()),
                     );
                   },
-                  child: const Text(
-                    "Get Started",
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 50),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Colors.deepPurple, Colors.purple],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.purple.withOpacity(0.5),
+                          offset: const Offset(0, 4),
+                          blurRadius: 10,
+                        ),
+                      ],
+                    ),
+                    child: const Text(
+                      "Get Started",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ],
@@ -195,7 +209,6 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 }
-
 
 
 
