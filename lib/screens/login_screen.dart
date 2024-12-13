@@ -189,20 +189,28 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 10),
                   // Sign Up Button
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignupPage()),
-                      );
-                    },
-                    child: const Text(
-                      "Don't have an account? Sign Up",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.deepPurple,
-                        fontWeight: FontWeight.bold,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignupPage()),
+                        );
+                      },
+                      child: const Text(
+                        "Don't have an account? Sign Up",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
