@@ -2,13 +2,37 @@ import 'package:flutter/material.dart';
 import 'signup_screen.dart';
 import 'dashboard_screen.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  void _validateAndLogin() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple.shade50,
       appBar: AppBar(
         title: const Text("Login"),
         backgroundColor: Colors.deepPurple,
@@ -18,50 +42,48 @@ class LoginPage extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/login.jpg', // Background image
-              fit: BoxFit.cover, // Image will cover the entire screen
+              'assets/images/login.jpg',
+              fit: BoxFit.cover,
             ),
           ),
-          // Content on top of the image
+          // Content
           Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 20, vertical: 40), // Increased vertical padding
-            child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+            child: Form(
+              key: _formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Logo section with padding to avoid clipping
+                  // Logo
                   Image.asset(
-                    'assets/images/logo.jpg', // Path to your logo image
-                    height: 100, // Set the desired height for the logo
-                    fit: BoxFit
-                        .contain, // Ensure the logo maintains its aspect ratio
+                    'assets/images/logo.jpg',
+                    height: 100,
+                    fit: BoxFit.contain,
                   ),
-                  const SizedBox(height: 20), // Space after the logo
-
-                  // Futsal Quote Section with shading
-                  const SizedBox(height: 50), // Adjust for better positioning
+                  const SizedBox(height: 20),
+                  // Quote
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.black
-                          .withOpacity(0.5), // Semi-transparent black
+                      color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       '"Futsal is the foundation of football, where skill is built and perfected."',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.italic,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 40), // Space after the quote
-
-                  // Email TextField with improved styling
-                  TextField(
+                  const SizedBox(height: 30),
+                  // Email TextField
+                  TextFormField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       labelText: "Email",
                       hintText: "Enter your email",
@@ -69,18 +91,26 @@ class LoginPage extends StatelessWidget {
                           const Icon(Icons.email, color: Colors.deepPurple),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(
-                          color: Colors.deepPurple.shade200,
-                        ),
                       ),
                       filled: true,
                       fillColor: Colors.white,
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      if (!RegExp(
+                              r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
+                          .hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 20),
-
-                  // Password TextField with improved styling
-                  TextField(
+                  // Password TextField
+                  TextFormField(
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: "Password",
                       hintText: "Enter your password",
@@ -88,18 +118,23 @@ class LoginPage extends StatelessWidget {
                           const Icon(Icons.lock, color: Colors.deepPurple),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(
-                          color: Colors.deepPurple.shade200,
-                        ),
                       ),
                       filled: true,
                       fillColor: Colors.white,
                     ),
                     obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 30),
-
-                  // Login Button with a shadow effect
+                  // Login Button
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple,
@@ -108,73 +143,66 @@ class LoginPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      elevation: 5,
-                      shadowColor: Colors.deepPurple.shade300,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DashboardPage()),
-                      );
-                    },
+                    onPressed: _validateAndLogin,
                     child: const Text(
                       "Login",
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Forgot Password Link with improved visibility
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(
-                          0.7), // Light background to improve visibility
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        // Add your forgot password logic here
-                      },
-                      child: const Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                          color: Colors.deepPurple,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18, // Increased font size
-                        ),
+                  // Google Sign Up Button
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      // Implement Google Sign Up logic
+                    },
+                    icon: const Icon(Icons.g_mobiledata),
+                    label: const Text("Sign up with Google"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.deepPurple,
+                      side: BorderSide(color: Colors.deepPurple),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 20),
-
-                  // Sign up Link with improved visibility
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(
-                          0.7), // Light background to improve visibility
-                      borderRadius: BorderRadius.circular(30),
+                  const SizedBox(height: 10),
+                  // Apple Sign Up Button
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      // Implement Apple Sign Up logic
+                    },
+                    icon: const Icon(Icons.apple),
+                    label: const Text("Sign up with Apple"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignupPage()),
-                        );
-                      },
-                      child: const Text(
-                        "Don't have an account? Sign up",
-                        style: TextStyle(
-                          color: Colors.deepPurple,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18, // Increased font size
-                        ),
+                  ),
+                  const SizedBox(height: 10),
+                  // Sign Up Button
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignupPage()),
+                      );
+                    },
+                    child: const Text(
+                      "Don't have an account? Sign Up",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.deepPurple,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -187,104 +215,3 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
-
-
-// import 'package:flutter/material.dart';
-
-// class LoginScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           Container(
-//             decoration: const BoxDecoration(
-//               image: DecorationImage(
-//                 image: AssetImage(
-//                     'assets/login.jpg'), // Replace with your provided login background image
-//                 fit: BoxFit.cover,
-//               ),
-//             ),
-//           ),
-//           Center(
-//             child: SingleChildScrollView(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.center,
-//                 children: [
-//                   Text(
-//                     'Welcome Back!',
-//                     style: TextStyle(
-//                       fontSize: 32,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.white,
-//                     ),
-//                   ),
-//                   SizedBox(height: 20),
-//                   Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-//                     child: TextField(
-//                       style: TextStyle(color: Colors.white),
-//                       decoration: InputDecoration(
-//                         prefixIcon: Icon(Icons.email, color: Colors.white),
-//                         hintText: 'Enter your email',
-//                         hintStyle: TextStyle(color: Colors.white70),
-//                         filled: true,
-//                         fillColor: Colors.black.withOpacity(0.5),
-//                         border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(12),
-//                           borderSide: BorderSide.none,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   SizedBox(height: 15),
-//                   Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-//                     child: TextField(
-//                       obscureText: true,
-//                       style: TextStyle(color: Colors.white),
-//                       decoration: InputDecoration(
-//                         prefixIcon: Icon(Icons.lock, color: Colors.white),
-//                         hintText: 'Enter your password',
-//                         hintStyle: TextStyle(color: Colors.white70),
-//                         filled: true,
-//                         fillColor: Colors.black.withOpacity(0.5),
-//                         border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(12),
-//                           borderSide: BorderSide.none,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   SizedBox(height: 30),
-//                   ElevatedButton(
-//                     style: ElevatedButton.styleFrom(
-//                       backgroundColor: Colors.purple,
-//                       padding:
-//                           EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-//                       shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(12)),
-//                     ),
-//                     onPressed: () {
-//                       Navigator.pushNamed(context, '/dashboard');
-//                     },
-//                     child: Text('Login', style: TextStyle(fontSize: 18)),
-//                   ),
-//                   SizedBox(height: 15),
-//                   TextButton(
-//                     onPressed: () {
-//                       Navigator.pushNamed(context, '/signup');
-//                     },
-//                     child: Text('Don\'t have an account? Sign up',
-//                         style: TextStyle(color: Colors.white)),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
