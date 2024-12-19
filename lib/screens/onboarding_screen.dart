@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:futsal_booking/screens/login_screen.dart';
-import 'dart:ui'; // Required for BackdropFilter
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -27,45 +26,58 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
             children: const [
               OnboardingPage(
-                imagePath: 'assets/images/onboarding.jpg',
+                imagePath: 'assets/images/onboarding1.jpg',
                 title: 'Welcome to Futsal Booking',
                 description:
-                    'Book your futsal matches seamlessly and manage your schedule effortlessly.',
+                    'Book futsal matches seamlessly and manage your schedule effortlessly.',
               ),
               OnboardingPage(
-                imagePath: 'assets/images/onboarding.jpg',
+                imagePath: 'assets/images/onboarding2.jpg',
                 title: 'Find Your Perfect Match',
                 description:
                     'Connect with players and enjoy competitive matches tailored for you.',
               ),
               OnboardingPage(
-                imagePath: 'assets/images/onboarding.jpg',
+                imagePath: 'assets/images/onboarding3.jpeg',
                 title: 'Track Your Progress',
                 description:
-                    'Keep a record of your games and performance easily.',
+                    'Keep a record of your games and performance with ease.',
                 isLastPage: true,
               ),
             ],
           ),
           // Page Indicator
           Positioned(
-            bottom: 20,
+            bottom: 40,
             left: 0,
             right: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                3, // Total number of slides
+                3,
                 (index) => AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: _currentIndex == index ? 16 : 8,
-                  height: 8,
+                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                  width: _currentIndex == index ? 20 : 12,
+                  height: 12,
                   decoration: BoxDecoration(
-                    color: _currentIndex == index
-                        ? Colors.deepPurple
-                        : Colors.grey,
-                    borderRadius: BorderRadius.circular(4),
+                    gradient: _currentIndex == index
+                        ? const LinearGradient(
+                            colors: [Colors.deepPurple, Colors.blueAccent],
+                          )
+                        : const LinearGradient(
+                            colors: [Colors.grey, Colors.grey],
+                          ),
+                    borderRadius: BorderRadius.circular(6),
+                    boxShadow: _currentIndex == index
+                        ? [
+                            BoxShadow(
+                              color: Colors.deepPurpleAccent.withOpacity(0.4),
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                            ),
+                          ]
+                        : null,
                   ),
                 ),
               ),
@@ -95,72 +107,49 @@ class OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Background Image
+        // Background Image with Gradient Overlay
         Positioned.fill(
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.4),
+                  BlendMode.darken,
+                ),
+              ),
+            ),
           ),
         ),
-        // Content
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 80),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Title
-              ShaderMask(
-                shaderCallback: (bounds) {
-                  return const LinearGradient(
-                    colors: [Colors.deepPurple, Colors.blueAccent],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ).createShader(bounds);
-                },
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(2, 2),
-                        blurRadius: 6.0,
-                        color: Color(0x80000000),
-                      ),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.5,
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
 
               // Description
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.6),
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
+              Text(
+                description,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.white70,
+                  height: 1.5,
                 ),
-                child: Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 60),
 
@@ -168,12 +157,14 @@ class OnboardingPage extends StatelessWidget {
               if (isLastPage)
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
+                    backgroundColor: Colors.deepPurpleAccent,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 50, vertical: 15),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(30),
                     ),
+                    shadowColor: Colors.deepPurpleAccent.withOpacity(0.5),
+                    elevation: 8,
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -186,13 +177,12 @@ class OnboardingPage extends StatelessWidget {
                   child: const Text(
                     "Get Started",
                     style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                 ),
-              if (!isLastPage) const SizedBox(),
             ],
           ),
         ),
