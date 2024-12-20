@@ -72,8 +72,9 @@ class _LoginPageState extends State<LoginPage> {
                       const Text(
                         "Welcome Back!",
                         style: TextStyle(
+                          fontFamily: 'Montserrat Regular',
                           fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                          // fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       ),
@@ -81,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                       const Text(
                         "Log in to continue",
                         style: TextStyle(
+                          fontFamily: 'Montserrat Bold',
                           fontSize: 16,
                           color: Colors.white70,
                         ),

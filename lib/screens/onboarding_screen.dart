@@ -26,13 +26,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
             children: const [
               OnboardingPage(
-                imagePath: 'assets/images/onboarding1.jpg',
+                imagePath: 'assets/images/onboarding2.jpg',
                 title: 'Welcome to Futsal Booking',
                 description:
                     'Book futsal matches seamlessly and manage your schedule effortlessly.',
               ),
               OnboardingPage(
-                imagePath: 'assets/images/onboarding2.jpg',
+                imagePath: 'assets/images/onboarding1.jpg',
                 title: 'Find Your Perfect Match',
                 description:
                     'Connect with players and enjoy competitive matches tailored for you.',

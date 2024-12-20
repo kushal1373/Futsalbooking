@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
+
+  @override
+  _DashboardPageState createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    // You can navigate to different screens based on the index
+    // For example:
+    // if (index == 0) {
+    //   Navigator.pushNamed(context, '/home');
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Dashboard"),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -22,6 +40,7 @@ class DashboardPage extends StatelessWidget {
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: Colors.deepPurple,
+                fontFamily: 'Poppins',
               ),
             ),
             const SizedBox(height: 8),
@@ -30,6 +49,7 @@ class DashboardPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
+                fontFamily: 'Poppins',
               ),
             ),
             const SizedBox(height: 20),
@@ -79,6 +99,29 @@ class DashboardPage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications),
+            label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+      ),
     );
   }
 
@@ -102,7 +145,7 @@ class DashboardPage extends StatelessWidget {
               Icon(
                 icon,
                 size: 40,
-                color: Colors.deepPurple,
+                color: Theme.of(context).primaryColor,
               ),
               const SizedBox(height: 8),
               Text(
@@ -112,6 +155,7 @@ class DashboardPage extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
+                  fontFamily: 'Poppins',
                 ),
               ),
             ],
