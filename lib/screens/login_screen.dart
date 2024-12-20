@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:futsal_booking/screens/dashboard_screen.dart';
 
-import 'dashboard_screen.dart';
+// import 'dashboard_screen.dart';
 import 'signup_screen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState!.validate()) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const DashboardPage()),
+        MaterialPageRoute(builder: (context) => DashboardScreen()),
       );
     }
   }

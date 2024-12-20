@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(
-      scaffoldBackgroundColor: const Color.fromARGB(255, 64, 13, 108),
+      scaffoldBackgroundColor: const Color.fromARGB(255, 202, 200, 204),
       fontFamily: "Montserrat Regular",
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -10,7 +10,7 @@ ThemeData getApplicationTheme() {
                   fontSize: 18,
                   color: Colors.white,
                   fontWeight: FontWeight.w300,
-                  fontFamily: 'Montserrat Italic'),
+                  fontFamily: 'Montserrat Regular'),
               backgroundColor: const Color.fromARGB(255, 255, 255, 255),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)))),
