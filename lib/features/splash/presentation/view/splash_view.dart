@@ -1,113 +1,4 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:futsal_booking/features/splash/presentation/view_model/splash_cubit.dart';
 
-// class SplashView extends StatefulWidget {
-//   const SplashView({super.key});
-
-//   @override
-//   State<SplashView> createState() => _SplashViewState();
-// }
-
-// class _SplashViewState extends State<SplashView> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     Future.delayed(const Duration(seconds: 3), () {
-//       context.read<SplashCubit>().init(context);
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: const Color(0xFF004D40),
-//       body: Stack(
-//         children: [
-//           // Background gradient
-//           Container(
-//             decoration: const BoxDecoration(
-//               gradient: LinearGradient(
-//                 colors: [Color(0xFF00796B), Color(0xFF004D40)],
-//                 begin: Alignment.topCenter,
-//                 end: Alignment.bottomCenter,
-//               ),
-//             ),
-//           ),
-//           Center(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 // Splash logo
-//                 Container(
-//                   height: 150,
-//                   width: 150,
-//                   decoration: BoxDecoration(
-//                     shape: BoxShape.circle,
-//                     gradient: const LinearGradient(
-//                       colors: [Colors.tealAccent, Colors.teal],
-//                       begin: Alignment.topLeft,
-//                       end: Alignment.bottomRight,
-//                     ),
-//                     boxShadow: [
-//                       BoxShadow(
-//                         color: Colors.black.withOpacity(0.2),
-//                         blurRadius: 10,
-//                         offset: const Offset(0, 5),
-//                       ),
-//                     ],
-//                   ),
-//                   child: Center(
-//                     child: Text(
-//                       'FB', // Initials of Futsal Booking
-//                       style: TextStyle(
-//                         fontSize: 48,
-//                         fontWeight: FontWeight.bold,
-//                         color: Colors.white,
-//                         fontFamily: 'Roboto',
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//                 const SizedBox(height: 20),
-//                 // App name
-//                 const Text(
-//                   'Futsal Booking Management',
-//                   style: TextStyle(
-//                     fontSize: 28,
-//                     fontWeight: FontWeight.bold,
-//                     color: Colors.white,
-//                   ),
-//                   textAlign: TextAlign.center,
-//                 ),
-//                 const SizedBox(height: 20),
-//                 // Progress indicator
-//                 const CircularProgressIndicator(
-//                   color: Colors.tealAccent,
-//                   strokeWidth: 3,
-//                 ),
-//               ],
-//             ),
-//           ),
-//           // Footer slogan
-//           Positioned(
-//             bottom: 20,
-//             width: MediaQuery.of(context).size.width,
-//             child: const Text(
-//               'Where Passion Meets the Court',
-//               style: TextStyle(
-//                 fontSize: 16,
-//                 fontStyle: FontStyle.italic,
-//                 color: Colors.tealAccent,
-//               ),
-//               textAlign: TextAlign.center,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -197,9 +88,9 @@ class _SplashViewState extends State<SplashView>
                       ],
                       image: const DecorationImage(
                         image: AssetImage(
-                            'assets/images/final.jpg'), // Path to your football image
+                            'assets/images/final.jpg'), // Path to  football image
                         fit: BoxFit
-                            .cover, // Ensures the image perfectly fits inside the circle
+                            .cover, 
                       ),
                     ),
                     child: Center(

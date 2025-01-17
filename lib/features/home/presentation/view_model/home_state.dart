@@ -17,14 +17,7 @@ class HomeState extends Equatable {
         const Center(
           child: Text('Dashboard'),
         ),
-        // BlocProvider(
-        // //   create: (context) => getIt<CourseBloc>(),
-        //   child: CourseView(),
-        // ),
-        // BlocProvider(
-        //   create: (context) => getIt<BatchBloc>(),
-        //   child: BatchView(),
-        // ),
+       
         const Center(
           child: Text('Account'),
         ),
