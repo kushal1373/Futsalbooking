@@ -1,6 +1,12 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:futsal_booking/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:futsal_booking/features/auth/presentation/view_model/signup/register_event.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -18,10 +24,69 @@ class _RegisterViewState extends State<RegisterView> {
   final _usernameController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
 
+  // // Check for camera permission
+  // Future<void> checkCameraPermission() async {
+  //   if (await Permission.camera.request().isRestricted ||
+  //       await Permission.camera.request().isDenied) {
+  //     await Permission.camera.request();
+  //   }
+  // }
+
+  // File? _img;
+  // Future _browseImage(ImageSource imageSource) async {
+  //   try {
+  //     final image = await ImagePicker().pickImage(source: imageSource);
+  //     if (image != null) {
+  //       setState(() {
+  //         _img = File(image.path);
+  //         // Send image to server
+  //         context.read<RegisterBloc>().add(
+  //               UploadImage(file: _img!),
+  //             );
+  //       });
+  //     } else {
+  //       return;
+  //     }
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
     Hive.openBox('users'); // Open Hive box for users
+  }
+
+  Future<void> checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
+  }
+
+  File? _img;
+  String? path;
+  Future _browseImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _img = File(image.path);
+          print(image.path);  
+          path = image.path.split('/').last;
+          print("path var imagepath : $path");
+          // Send image to server
+          context.read<RegisterBloc>().add(
+                UploadImage(file: _img!),
+              );
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
@@ -57,6 +122,60 @@ class _RegisterViewState extends State<RegisterView> {
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                           color: Colors.teal,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            backgroundColor: Colors.grey[300],
+                            context: context,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            builder: (context) => Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      checkCameraPermission();
+                                      _browseImage(ImageSource.camera);
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(Icons.camera),
+                                    label: const Text('Camera'),
+                                  ),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      _browseImage(ImageSource.gallery);
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(Icons.image),
+                                    label: const Text('Gallery'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        child: SizedBox(
+                          height: 200,
+                          width: 200,
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: _img != null
+                                ? FileImage(_img!)
+                                : const AssetImage('assets/images/profile.png')
+                                    as ImageProvider,
+                            // backgroundImage:
+                            //     const AssetImage('assets/images/profile.png')
+                            //         as ImageProvider,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -133,36 +252,19 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
                           onPressed: () async {
                             if (_key.currentState!.validate()) {
-                              final box = Hive.box('users');
-
-                              if (box.containsKey(_usernameController.text)) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Username already exists!'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return;
-                              }
-
-                              await box.put(
-                                _usernameController.text,
-                                {
-                                  'firstName': _fnameController.text,
-                                  'lastName': _lnameController.text,
-                                  'phone': _phoneController.text,
-                                  'password': _passwordController.text,
-                                },
-                              );
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'Registration successful! Please log in.'),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                              Navigator.pop(context);
+                              final registerState =
+                                  context.read<RegisterBloc>().state;
+                              final imageName = registerState.imageName;
+                              print("image name : $imageName");
+                              context.read<RegisterBloc>().add(RegisterStudent(
+                                    context: context,
+                                    fName: _fnameController.text,
+                                    lName: _lnameController.text,
+                                    image: path,
+                                    username: _usernameController.text,
+                                    phone: _phoneController.text,
+                                    password: _passwordController.text,
+                                  ));
                             }
                           },
                           child: const Text(

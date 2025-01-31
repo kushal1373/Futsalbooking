@@ -23,7 +23,7 @@ class AuthLocalRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, String>> loginStudent(
+  Future<Either<Failure, String>> loginCustomer(
     String email,
     String password,
   ) async {
@@ -36,9 +36,9 @@ class AuthLocalRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> registerStudent(AuthEntity student) async {
+  Future<Either<Failure, void>> registerCustomer(AuthEntity Customer) async {
     try {
-      return Right(_authLocalDataSource.registerStudent(student));
+      return Right(_authLocalDataSource.registerCustomer(Customer));
     } catch (e) {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }

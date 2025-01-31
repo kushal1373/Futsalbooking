@@ -212,25 +212,14 @@ class _LoginViewState extends State<LoginView>
                         ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              final box = Hive.box('users');
-                              final user = box.get(_usernameController.text);
+                              context.read<LoginBloc>().add(
+                                    LoginCustomerEvent(
+                                      context: context,
+                                      username: _usernameController.text,
+                                      password: _passwordController.text,
+                                    ),
+                                  );
 
-                              if (user != null &&
-                                  user['password'] ==
-                                      _passwordController.text) {
-                                context.read<LoginBloc>().add(
-                                      NavigateHomeScreenEvent(
-                                        destination: const HomeView(),
-                                        context: context,
-                                      ),
-                                    );
-                              } else {
-                                showMySnackBar(
-                                  context: context,
-                                  message: 'Invalid username or password',
-                                  color: Colors.red,
-                                );
-                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
