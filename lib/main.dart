@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:futsal_booking/app/di/di.dart';
 import 'package:futsal_booking/app/widget/app.dart';
