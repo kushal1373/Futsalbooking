@@ -1,5 +1,5 @@
+import 'package:Futsal_booking/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:futsal_booking/screens/login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

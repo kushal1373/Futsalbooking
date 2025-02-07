@@ -1,5 +1,5 @@
+import 'package:Futsal_booking/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:futsal_booking/screens/dashboard_screen.dart';
 
 // import 'dashboard_screen.dart';
 import 'signup_screen.dart';
@@ -205,6 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: const Text(
                           "Don't have an account? Sign Up",
                           style: TextStyle(
+                            
                             color: Colors.white,
                             fontSize: 14,
                           ),

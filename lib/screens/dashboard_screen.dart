@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'court_detail_page.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -66,7 +67,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Court Finder',
+          'Futsal Court Finder',
           style: TextStyle(
             fontFamily: 'Montserrat Regular',
             color: Colors.white,
