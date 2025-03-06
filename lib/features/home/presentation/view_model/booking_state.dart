@@ -40,10 +40,12 @@ abstract class BookingState extends Equatable {
   List<Object> get props => [];
 }
 
+class BookingInitial extends BookingState {}
+
 class BookingLoading extends BookingState {}
 
 class BookingLoaded extends BookingState {
-  final List<Booking> bookings;
+  final List<BookingModel> bookings;
 
   const BookingLoaded({required this.bookings});
 

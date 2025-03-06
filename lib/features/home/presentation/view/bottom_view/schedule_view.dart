@@ -15,15 +15,15 @@
 // }
 
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:futsal_booking/features/home/data/model/booking_model.dart';
 import 'package:futsal_booking/features/home/presentation/view_model/booking_cubit.dart';
 import 'package:futsal_booking/features/home/presentation/view_model/booking_state.dart';
 
 class ScheduleView extends StatefulWidget {
-  const ScheduleView({Key? key}) : super(key: key);
+  const ScheduleView({super.key});
 
   @override
   State<ScheduleView> createState() => _ScheduleViewState();
@@ -36,23 +36,19 @@ class _ScheduleViewState extends State<ScheduleView> with SingleTickerProviderSt
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    context.read<BookingCubit>().fetchBookings();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5), // Soft background
       appBar: AppBar(
-        title: const Text("My Schedule", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-        backgroundColor: const Color(0xFF00796B), // Matching Futsal Finder theme
+        title: const Text('My Schedule'),
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
           tabs: const [
-            Tab(text: "Upcoming"),
-            Tab(text: "Past"),
+            Tab(text: 'Upcoming'),
+            Tab(text: 'Past'),
           ],
         ),
       ),
@@ -61,60 +57,84 @@ class _ScheduleViewState extends State<ScheduleView> with SingleTickerProviderSt
           if (state is BookingLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is BookingLoaded) {
-            final pastBookings = state.bookings.where((b) => b.isPast).toList();
-            final upcomingBookings = state.bookings.where((b) => !b.isPast).toList();
+            final now = DateTime.now();
+
+            final upcomingBookings = state.bookings.where((booking) {
+              return booking.dateTime.isAfter(now);
+            }).toList();
+
+            final pastBookings = state.bookings.where((booking) {
+              return booking.dateTime.isBefore(now);
+            }).toList();
 
             return TabBarView(
               controller: _tabController,
               children: [
-                _buildBookingList(upcomingBookings, "No upcoming bookings.", Colors.green),
-                _buildBookingList(pastBookings, "No past bookings.", Colors.red),
+                _buildBookingList(upcomingBookings),
+                _buildBookingList(pastBookings),
               ],
             );
+          } else if (state is BookingError) {
+            return Center(child: Text('Error: ${state.message}'));
           } else {
-            return const Center(child: Text("Something went wrong!"));
+            return const SizedBox.shrink();
           }
         },
       ),
     );
   }
 
-  /// Booking List UI
-  Widget _buildBookingList(List<Booking> bookings, String emptyMessage, Color color) {
+  Widget _buildBookingList(List<BookingModel> bookings) {
     if (bookings.isEmpty) {
-      return Center(
-        child: Text(
-          emptyMessage,
-          style: const TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-      );
+      return const Center(child: Text('No bookings found.'));
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
       itemCount: bookings.length,
       itemBuilder: (context, index) {
         final booking = bookings[index];
-        return Card(
-          color: Colors.white,
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          elevation: 5,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(16),
-            leading: Icon(Icons.sports_soccer, color: color, size: 30),
-            title: Text(
-              booking.courtName,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-            ),
-            subtitle: Text(
-              "📅 ${booking.formattedDate}  |  ⏰ ${booking.timeSlot}",
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            trailing: booking.isPast ? const Icon(Icons.history, color: Colors.red) : const Icon(Icons.upcoming, color: Colors.blue),
-          ),
-        );
+        return _buildBookingCard(booking);
       },
+    );
+  }
+
+  Widget _buildBookingCard(BookingModel booking) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          children: [
+            const Icon(Icons.sports_soccer, size: 36, color: Colors.green),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    booking.courtName,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.calendar_today, size: 16, color: Colors.blue),
+                      const SizedBox(width: 4),
+                      Text(DateFormat('yyyy-MM-dd').format(booking.dateTime)),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.access_time, size: 16, color: Colors.orange),
+                      const SizedBox(width: 4),
+                      Text(booking.timeSlot),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.emoji_events, color: Colors.blue),
+          ],
+        ),
+      ),
     );
   }
 }

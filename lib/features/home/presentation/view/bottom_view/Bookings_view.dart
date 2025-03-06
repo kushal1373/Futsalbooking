@@ -1,117 +1,117 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:futsal_booking/features/home/presentation/view_model/booking_cubit.dart';
-// import 'package:futsal_booking/features/home/presentation/view_model/booking_state.dart';
-
-// class BookingsView extends StatelessWidget {
-//   const BookingsView({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (context) => BookingCubit()..fetchBookings(),
-//       child: Scaffold(
-//         appBar: AppBar(
-//           title: const Text("My Bookings"),
-//           backgroundColor: Colors.deepPurple,
-//         ),
-//         body: BlocBuilder<BookingCubit, BookingState>(
-//           builder: (context, state) {
-//             if (state is BookingLoading) {
-//               return const Center(child: CircularProgressIndicator());
-//             } else if (state is BookingLoaded) {
-//               return state.bookings.isEmpty
-//                   ? const Center(child: Text("No bookings yet."))
-//                   : ListView.builder(
-//                       itemCount: state.bookings.length,
-//                       itemBuilder: (context, index) {
-//                         return ListTile(
-//                           title: Text(state.bookings[index]),
-//                           leading: const Icon(Icons.sports_soccer, color: Colors.deepPurple),
-//                         );
-//                       },
-//                     );
-//             } else if (state is BookingError) {
-//               return Center(child: Text(state.message, style: const TextStyle(color: Colors.red)));
-//             } else {
-//               return const Center(child: Text("Something went wrong!"));
-//             }
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }
-
+//this is working correctly
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:futsal_booking/features/home/domain/entity/court_entity.dart';
 import 'package:futsal_booking/features/home/presentation/view_model/booking_cubit.dart';
 import 'package:futsal_booking/features/home/presentation/view_model/booking_state.dart';
-import 'package:futsal_booking/features/home/data/model/booking_model.dart';
+import 'package:intl/intl.dart';
 
-class BookingsView extends StatelessWidget {
-  const BookingsView({Key? key}) : super(key: key);
+class BookingView extends StatefulWidget {
+  final CourtEntity court;
+  final String userId;
+
+  const BookingView({super.key, required this.court, required this.userId});
+
+  @override
+  State<BookingView> createState() => _BookingViewState();
+}
+
+class _BookingViewState extends State<BookingView> {
+  DateTime? selectedDate;
+  String? selectedTimeSlot;
+
+  final List<String> timeSlots = [
+    '6:00 - 7:00am',
+    '7:00 - 8:00am',
+    '8:00 - 9:00am',
+    '9:00 - 10:00am',
+    '10:00 - 11:00am',
+    '11:00 - 12:00pm',
+    '12:00 - 1:00pm',
+    '1:00 - 2:00pm',
+    '2:00 - 3:00pm',
+    '3:00 - 4:00pm',
+    '4:00 - 5:00pm',
+    '5:00 - 6:00pm',
+    '6:00 - 7:00pm',
+    '7:00 - 8:00pm',
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => BookingCubit()..fetchBookings(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("My Bookings"),
-          backgroundColor: Colors.deepPurple,
-        ),
-        body: BlocBuilder<BookingCubit, BookingState>(
-          builder: (context, state) {
-            if (state is BookingLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is BookingLoaded) {
-              final pastBookings = state.bookings.where((b) => b.isPast).toList();
-              final upcomingBookings = state.bookings.where((b) => !b.isPast).toList();
-
-              return ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  if (upcomingBookings.isNotEmpty) ...[
-                    const Text("Upcoming Bookings",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    ...upcomingBookings.map((booking) => _buildBookingTile(booking, Colors.green)),
-                  ],
-                  if (pastBookings.isNotEmpty) ...[
-                    const SizedBox(height: 16),
-                    const Text("Past Bookings",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    ...pastBookings.map((booking) => _buildBookingTile(booking, Colors.red)),
-                  ],
-                  if (state.bookings.isEmpty) 
-                    const Center(child: Text("No bookings yet.")),
-                ],
-              );
-            } else if (state is BookingError) {
-              return Center(child: Text(state.message, style: const TextStyle(color: Colors.red)));
-            } else {
-              return const Center(child: Text("Something went wrong!"));
-            }
-          },
+    return Scaffold(
+      appBar: AppBar(title: Text('Book ${widget.court.name}')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: _pickDate,
+              child: Text(selectedDate == null
+                  ? 'Pick Date'
+                  : DateFormat('yyyy-MM-dd').format(selectedDate!)),
+            ),
+            DropdownButton<String>(
+              value: selectedTimeSlot,
+              hint: const Text('Select Time Slot'),
+              isExpanded: true,
+              items: timeSlots.map((slot) {
+                return DropdownMenuItem(
+                  value: slot,
+                  child: Text(slot),
+                );
+              }).toList(),
+              onChanged: (value) => setState(() => selectedTimeSlot = value),
+            ),
+            const Spacer(),
+            BlocConsumer<BookingCubit, BookingState>(
+              listener: (context, state) {
+                if (state is BookingError) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(state.message)));
+                } else if (state is BookingLoaded) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Booking Successful!')));
+                  Navigator.pop(context);
+                }
+              },
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: _confirmBooking,
+                  child: state is BookingLoading
+                      ? const CircularProgressIndicator()
+                      : const Text('Confirm Booking'),
+                );
+              },
+            )
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildBookingTile(Booking booking, Color iconColor) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      elevation: 3,
-      child: ListTile(
-        leading: Icon(Icons.sports_soccer, color: iconColor),
-        title: Text(booking.courtName),
-        subtitle: Text("Date: ${booking.formattedDate} • Time: ${booking.timeSlot}"),
-        trailing: booking.isPast
-            ? const Icon(Icons.history, color: Colors.grey)
-            : const Icon(Icons.upcoming, color: Colors.blue),
-      ),
+  Future<void> _pickDate() async {
+    final date = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 30)),
     );
+    if (date != null) setState(() => selectedDate = date);
+  }
+
+  void _confirmBooking() {
+    if (selectedDate == null || selectedTimeSlot == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select date and time slot')));
+      return;
+    }
+
+    context.read<BookingCubit>().addBooking({
+      'courtName': widget.court.name,
+      'dateTime': selectedDate!.toIso8601String(),
+      'timeSlot': selectedTimeSlot,
+      'userId': widget.userId,
+    });
   }
 }

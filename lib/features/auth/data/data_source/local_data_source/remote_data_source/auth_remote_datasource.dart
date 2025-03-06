@@ -11,14 +11,32 @@ class AuthRemoteDataSource implements IAuthDataSource {
   AuthRemoteDataSource(this._dio);
 
 
-
-  @override
-  Future<AuthEntity> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+@override
+Future<AuthEntity> getCurrentUser() async {
+  try {
+    final response = await _dio.get(ApiEndpoints.getCurrentUser);
+    if (response.statusCode == 200) {
+      final data = response.data;
+      return AuthEntity(
+        fName: data['firstName'],
+        lName: data['lastName'],
+        phone: data['phone'] ?? '',    // or handle phone as needed
+        username: data['username'],
+        password: '', // Usually don't store or return raw passwords
+        image: data['image'],
+      );
+    } else {
+      throw Exception(response.statusMessage);
+    }
+  } on DioException catch (e) {
+    throw Exception(e);
+  } catch (e) {
+    throw Exception(e);
   }
+}
 
 
+  
   @override
   Future<String> uploadProfilePicture(File file) async {
     try {

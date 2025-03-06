@@ -1,4 +1,3 @@
-
 // import 'package:flutter/material.dart';
 
 // class CourtDetailPage extends StatefulWidget {
@@ -238,14 +237,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:futsal_booking/features/home/presentation/view_model/booking_cubit.dart';
-import 'package:futsal_booking/features/home/data/model/booking_model.dart';
 
 class CourtDetailPage extends StatefulWidget {
   final String courtName;
-  final String courtImage;
+  final String courtImage; // This is a network URL
 
-  const CourtDetailPage({Key? key, required this.courtName, required this.courtImage})
-      : super(key: key);
+  const CourtDetailPage({
+    Key? key,
+    required this.courtName,
+    required this.courtImage,
+  }) : super(key: key);
 
   @override
   State<CourtDetailPage> createState() => _CourtDetailPageState();
@@ -255,6 +256,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
   DateTime selectedDate = DateTime.now();
   String? selectedTime;
 
+  // Define available time slots (or these could come from the API)
   final List<String> timeSlots = [
     "6:00 AM - 7:00 AM",
     "7:00 AM - 8:00 AM",
@@ -278,26 +280,39 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         title: Text(widget.courtName),
-        backgroundColor: const Color(0xFF0056B3), // Professional Blue
+        backgroundColor: const Color(0xFF0056B3),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// Court Image
+            // Display the large image from the network
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: Image.asset(widget.courtImage, height: 250, width: double.infinity, fit: BoxFit.cover),
+              child: Image.network(
+                widget.courtImage,
+                height: 250,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const SizedBox(
+                    height: 250,
+                    child: Center(child: Icon(Icons.error)),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 16),
-
-            /// Select Date
-            const Text("Select Date", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+            // Date selection button
+            const Text(
+              "Select Date",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () async {
-                DateTime? pickedDate = await showDatePicker(
+                final DateTime? pickedDate = await showDatePicker(
                   context: context,
                   initialDate: selectedDate,
                   firstDate: DateTime.now(),
@@ -316,9 +331,11 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
               child: Text("📅 Selected Date: ${selectedDate.toLocal().toString().split(' ')[0]}"),
             ),
             const SizedBox(height: 16),
-
-            /// Select Time Slot
-            const Text("Available Time Slots", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+            // Display time slots as chips
+            const Text(
+              "Available Time Slots",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -336,21 +353,25 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
               }).toList(),
             ),
             const SizedBox(height: 24),
-
-            /// Book Now Button
+            // Confirm Booking Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
                   if (selectedTime == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please select a time slot!")));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Please select a time slot!")),
+                    );
                     return;
                   }
-                  BlocProvider.of<BookingCubit>(context, listen: false).addBooking(Booking(
-                    courtName: widget.courtName,
-                    dateTime: selectedDate,
-                    timeSlot: selectedTime!,
-                  ));
+                  // Prepare booking data map
+                  final bookingData = {
+                    "courtName": widget.courtName,
+                    "dateTime": selectedDate.toIso8601String(),
+                    "timeSlot": selectedTime,
+                  };
+                  // Call BookingCubit to add the booking
+                  context.read<BookingCubit>().addBooking(bookingData);
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(

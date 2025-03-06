@@ -16,24 +16,68 @@
 //   }
 // }
 
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:futsal_booking/features/home/data/model/booking_model.dart';
+// import 'package:futsal_booking/features/home/domain/use_case/create_booking_usecase.dart';
+// import 'package:futsal_booking/features/home/domain/use_case/get_bookings_usecase.dart';
+// import 'package:futsal_booking/features/home/presentation/view_model/booking_state.dart';
+
+// class BookingCubit extends Cubit<BookingState> {
+//   final GetBookingsUseCase getBookingsUseCase;
+//   final CreateBookingUseCase createBookingUseCase;
+
+//   BookingCubit(this.getBookingsUseCase, this.createBookingUseCase)
+//       : super(BookingInitial());
+
+//   Future<void> fetchBookings() async {
+//     emit(BookingLoading());
+//     final result = await getBookingsUseCase();
+//     result.fold(
+//       (failure) => emit(BookingError(message: failure.message)),
+//       (bookings) => emit(BookingLoaded(bookings: bookings)),
+//     );
+//   }
+
+//   Future<void> addBooking(Map<String, dynamic> bookingData) async {
+//     final result = await createBookingUseCase(bookingData);
+//     result.fold(
+//       (failure) => emit(BookingError(message: failure.message)),
+//       (booking) {
+//         // Optionally, update state with the new booking or simply re-fetch bookings.
+//         fetchBookings();
+//       },
+//     );
+//   }
+// }
+
+
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:futsal_booking/features/home/domain/use_case/create_booking_usecase.dart';
+import 'package:futsal_booking/features/home/domain/use_case/get_bookings_usecase.dart';
 import 'package:futsal_booking/features/home/presentation/view_model/booking_state.dart';
-import 'package:futsal_booking/features/home/data/model/booking_model.dart';
 
 class BookingCubit extends Cubit<BookingState> {
-  BookingCubit() : super(BookingLoading());
+  final GetBookingsUseCase getBookingsUseCase;
+  final CreateBookingUseCase createBookingUseCase;
 
-  final List<Booking> _bookings = []; // Stores all bookings
+  BookingCubit(this.getBookingsUseCase, this.createBookingUseCase) : super(BookingInitial());
 
-  /// Fetch stored bookings
-  void fetchBookings() {
-    emit(BookingLoaded(bookings: List.from(_bookings))); // Emit stored bookings
+  Future<void> fetchBookings() async {
+    emit(BookingLoading());
+    final result = await getBookingsUseCase();
+    result.fold(
+      (failure) => emit(BookingError(message: failure.message)),
+      (bookings) => emit(BookingLoaded(bookings: bookings)),
+    );
   }
 
-  /// Add a new booking
-  void addBooking(Booking booking) {
-    _bookings.add(booking);
-    emit(BookingLoaded(bookings: List.from(_bookings))); // Emit updated list
+  Future<void> addBooking(Map<String, dynamic> bookingData) async {
+    emit(BookingLoading());
+    final result = await createBookingUseCase(bookingData);
+    result.fold(
+      (failure) => emit(BookingError(message: failure.message)),
+      (_) => fetchBookings(),
+    );
   }
 }

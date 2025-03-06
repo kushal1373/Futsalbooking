@@ -11,4 +11,6 @@ class ApiEndpoints {
   static const String deleteStudent = "auth/deleteStudent/";
   static const String imageUrl = "http://10.0.2.2:3000/uploads";
   static const String uploadImage = "ground/uploadImage";
+  static const String getCurrentUser = '/api/auth/me';
+
 }
